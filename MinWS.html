@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<title>Min WS</title>
+<style>
+  * {   font-family: Verdana, Arial, sans-serif;    }
+</style>
+
+Click on the start button and begin speaking <p>
+
+<div class="right">
+  <button id="start_button" onclick="startButton(event)">Start Recording</button><p>
+</div>
+
+<div id="results">
+  <span id="final_span" class="final"></span>
+  <span id="interim_span" class="interim"></span>
+</div>
+
+<script>
+var final_transcript = '';
+var recognizing = false;
+var recognition = new webkitSpeechRecognition();
+recognition.continuous = true;
+recognition.interimResults = true;
+recognition.onstart = function() { recognizing = true; };
+recognition.onend = function() { recognizing = false; };
+
+recognition.onresult = function(event) {
+    console.log(event);
+    var interim_transcript = '';
+    for (var i = event.resultIndex; i < event.results.length; ++i) {
+      if (event.results[i].isFinal) {
+        final_transcript += event.results[i][0].transcript;
+      } else {
+        interim_transcript += event.results[i][0].transcript;
+      }
+    }
+    final_span.innerHTML = final_transcript;
+    interim_span.innerHTML = interim_transcript;
+  };
+
+function startButton(event) {
+  if (recognizing) {
+    recognition.stop();
+    start_button.innerHTML = "Start Recording";
+    return;
+  }
+  final_transcript = '';
+  recognition.lang = "en-GB";
+  recognition.start();
+  final_span.innerHTML = '';
+  interim_span.innerHTML = '';
+  start_button.innerHTML = "Stop Recording";
+}
+</script>
