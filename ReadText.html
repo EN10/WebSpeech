@@ -1,0 +1,13 @@
+<textarea rows="4" cols="50" id="myText">
+    Click the "Read Text" button
+</textarea> <p>
+
+<button onclick="myFunction()">Read Text</button>
+
+<script>
+function myFunction() {
+    var txt = document.getElementById("myText").value;
+    var msg = new SpeechSynthesisUtterance(txt);
+    window.speechSynthesis.speak(msg);
+}
+</script>
